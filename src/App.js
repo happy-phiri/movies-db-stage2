@@ -1,24 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import "./App.css";
+import Header from "./components/Header";
+import Movies from "./components/Movies";
+import SearchResults from "./components/SearchResults";
+import MovieInfo from "./components/MovieInfo";
+import Error from "./components/Error";
+import { useGlobalContext } from "./Context";
 
 function App() {
+  const { movieId, searchTerm } = useGlobalContext();
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <main className="App">
+        <Header />
+
+        <Routes>
+          <Route path="/" element={<Movies />} />
+          <Route path={`result/${searchTerm}`} element={<SearchResults />} />
+          <Route
+            path={`movie/${movieId}`}
+            element={movieId ? <MovieInfo /> : <Error />}
+          />
+          <Route path="*" element={<Error />} />
+        </Routes>
+      </main>
+    </Router>
   );
 }
 
